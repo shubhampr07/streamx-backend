@@ -2,12 +2,16 @@
 import http from "http";
 import express from "express";
 import path from "path";
+import cors from "cors"
 import { spawn } from "child_process";
 import { Server as SocketIO } from "socket.io";
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
-const io = new SocketIO(server);
+const io = new SocketIO(server, {
+    cors: {}
+});
 
 let key = '';
 let ffmpegProcess;
@@ -56,7 +60,7 @@ function stopFfmpeg() {
     }
 }
 
-app.use(express.static(path.resolve('./public')));
+// app.use(express.static(path.resolve('./public')));
 
 io.on('connection', socket => {
     console.log('Socket Connected:', socket.id);
